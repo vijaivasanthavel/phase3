@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smarter AI - Digit Recognizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    canvas {
+      border: 2px solid #444;
+      background-color: white;
+      cursor: crosshair;
+    }
+
+    .controls {
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      font-size: 24px;
+      color: #222;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Smarter AI: Handwritten Digit Recognizer</h1>
+  <canvas id="canvas" width="280" height="280"></canvas>
+
+  <div class="controls">
+    <button onclick="clearCanvas()">Clear</button>
+    <button onclick="predictDigit()">Predict</button>
+  </div>
+
+  <div id="result">Draw a digit and click Predict</div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    // Setup canvas drawing
+    canvas.addEventListener('mousedown', () => { drawing = true; ctx.beginPath(); });
+    canvas.addEventListener('mouseup', () => { drawing = false; ctx.beginPath(); });
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+      if (!drawing) return;
+      ctx.lineWidth = 15;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'black';
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById('result').innerText = "Draw a digit and click Predict";
+    }
+
+    function predictDigit() {
+      const imageData = canvas.toDataURL('image/png');
+
+      fetch('http://localhost:5000/predict', { // 🔁 Replace with your backend URL
+        method: 'POST',
+        body: JSON.stringify({ image: imageData }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('result').innerText = `Predicted Digit: ${data.prediction}`;
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('result').innerText = 'Prediction failed.';
+      });
+    }
+  </script>
+
+</body>
+</html>
