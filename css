@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Handwritten Digit Recognizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #f7f7f7;
+    }
+    canvas {
+      border: 2px solid #000;
+      background-color: white;
+      cursor: crosshair;
+    }
+    .buttons {
+      margin-top: 15px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #result {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Digit Recognizer</h1>
+  <canvas id="canvas" width="280" height="280"></canvas>
+  <div class="buttons">
+    <button onclick="clearCanvas()">Clear</button>
+    <button onclick="predict()">Predict</button>
+  </div>
+  <div id="result">Draw a digit and click Predict</div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let painting = false;
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+    }
+    function endPosition() {
+      painting = false;
+      ctx.beginPath();
+    }
+    function draw(e) {
+      if (!painting) return;
+      ctx.lineWidth = 15;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'black';
+
+      ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
+
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("result").innerText = "Draw a digit and click Predict";
+    }
+
+    function predict() {
+      // This function would typically send canvas data to a backend for prediction.
+      // For now, it just shows a fake result.
+      document.getElementById("result").innerText = "Predicted: " + Math.floor(Math.random() * 10);
+    }
+  </script>
+
+</body>
+</html>
