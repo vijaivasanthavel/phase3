@@ -1,0 +1,23 @@
+flask
+flask-cors
+tensorflow
+numpy
+opencv-python
+pillow
+scikit-learn
+matplotlib
+| Package         | Use Case                                     |
+| --------------- | -------------------------------------------- |
+| `flask`         | Serves the AI model through a web API        |
+| `flask-cors`    | Allows frontend (JavaScript) to call backend |
+| `tensorflow`    | Deep learning library to train and run model |
+| `numpy`         | Image/matrix manipulation                    |
+| `opencv-python` | Image preprocessing (grayscale, resize)      |
+| `pillow`        | Basic image operations like loading/saving   |
+| `scikit-learn`  | For model evaluation and preprocessing tools |
+| `matplotlib`    | For visualizing digit data if needed         |
+| Component          | Minimum Recommendation         |
+| ------------------ | ------------------------------ |
+| Python version     | 3.7 – 3.10                     |
+| RAM                | 4GB+                           |
+| GPU (for training) | NVIDIA CUDA-enabled (optional) |
